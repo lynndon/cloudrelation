@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>人物图谱</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="build/cloudspectrum.css"/>
+
+
+	<script src="jquery-1.9.1.js"></script>
+	<script src="raphael-min.js"></script>
+  <script src="cloundrelation.js"></script>
+
+
+	</head>
+	
+	<body>
+
+		<div>
+			<span style="display:inline-block">
+				<p>编辑区</p>
+				<div id="svg-container-edit" >
+				</div>
+			</span>
+			<span style="display:inline-block">
+				<p>显示区</p>
+				<div id="svg-container-view">
+				</div>
+			</span>
+		</div>
+
+		<div>
+			<textarea id="saveData" style="width:600px; height:100px"></textarea><br>
+			<button onclick="doSave()">保存数据</button> <button onclick="doInit()">显示数据</button>
+		</div>
+
+	<hr>
+	<footer>
+		<p>&copy; Leeme 2013</p>
+	</footer>
+    
+    <script type="text/javascript">
+    	
+    	var json = {
+			id: '300002',
+    		name: '贾政',
+    		parent: '0',
+			type: 'people',
+			color: '#ff0000',
+    		weight: 15,
+    		childNodes: [
+    			{
+	    			id: '400008',
+					name: '王夫人',
+					parent: '300002',
+					weight: 10,
+					type: 'place',
+					color: '#F16729',
+					childNodes: [
+					]
+    			},
+    			{
+					id: '400009',
+					name: '赵姨娘',
+					parent: '300002',
+					weight: 8,
+					type: 'people',
+					color: '#CA0D86',
+					childNodes: []
+				},
+				{
+					id: '400010',
+					name: '贾珠',
+					parent: '300002',
+					weight: 15,
+					type: 'people',
+					color: '#1F1F1F',
+					childNodes: [
+						{
+							id: '500001',
+							name: '李执',
+							parent: '400010',
+							weight: 15,
+							type: 'people',
+							color: '#87B11D',
+							childNodes: [
+							]
+						},
+						{
+							id: '500002',
+							name: '贾兰',
+							parent: '400010',
+							weight: 15,
+							type: 'people',
+							color: '#3277B5',
+							childNodes: [
+							]
+						}
+					]
+				},
+				{
+					id: '400011',
+					name: '贾元春',
+					parent: '300002',
+					weight: 15,
+					type: 'people',
+					color: '#F89322',
+					childNodes: [
+						{
+							id: '500002',
+							name: '贾兰',
+							parent: '400011',
+							weight: 15,
+							type: 'people',
+							color: '#F16729',
+							childNodes: [
+							]
+						}
+					]
+				},
+				{
+					id: '400012',
+					name: '贾宝玉',
+					parent: '300002',
+					weight: 15,
+					type: 'people',
+					color: '#F89322',
+					childNodes: [
+						{
+							id: '500003',
+							name: '袭人',
+							parent: '400012',
+							weight: 15,
+							type: 'people',
+							color: '#FFCF14',
+							childNodes: []
+						},
+						{
+							id: '500004',
+							name: '晴雯',
+							parent: '400012',
+							weight: 15,
+							type: 'people',
+							color: '#FFEA0D',
+							childNodes: []
+						},
+						{
+							id: '500005',
+							name: '茜雪',
+							parent: '400012',
+							weight: 15,
+							type: 'people',
+							color: '#87B11D',
+							childNodes: []
+						},
+						{
+							id: '500006',
+							name: '麝月',
+							parent: '400012',
+							weight: 15,
+							type: 'people',
+							color: '#008253',
+							childNodes: []
+						},
+						{
+							id: '500007',
+							name: '秋纹',
+							parent: '400012',
+							weight: 15,
+							type: 'people',
+							color: '#3277B5',
+							childNodes: []
+						},
+						{
+							id: '500008',
+							name: '惠香',
+							parent: '400012',
+							weight: 15,
+							type: 'people',
+							color: '#4C549F',
+							childNodes: [
+								{
+									id: '300002',
+						    		name: '贾政',
+						    		parent: '500008',
+						    		weight: 15,
+						    		type: 'people',
+									color: '#F16729',
+						    		childNodes: []
+								}
+							]
+						}
+					]
+				},
+				{
+					id: '400013',
+					name: '贾探春',
+					parent: '300002',
+					weight: 15,
+					type: 'people',
+					color: '#764394',
+					childNodes: []
+				},
+				{
+					id: '400014',
+					name: '贾环',
+					parent: '300002',
+					weight: 15,
+					type: 'people',
+					color: '#CA0D86',
+					childNodes: []
+				}
+    		]
+    	};
+
+    	var nodeData = {"content":[
+    		{"docName":"123家IPO排队企业终止审查","docScore":"","docUrl":"","docId":"138877","createDate":"2013-04-02 08:54:28"},
+    		{"docName":"今年以来被终止审查IPO企业升至123家","docScore":"","docUrl":"","docId":"130711","createDate":"2013-03-30 08:40:06"},
+    		{"docName":"财务自查大限到期 123家IPO企业撤单","docScore":"","docUrl":"","docId":"134046","createDate":"2013-04-01 08:29:50"},
+    		{"docName":"123家IPO企业被终止审查 中信建投国信证券&ldquo;最受伤&rdquo;","docScore":"","docUrl":"","docId":"142958","createDate":"2013-04-03 08:19:56"}], "totalcount":15};
+
+
+    	var per = new CloudSpectrum({node: '#svg-container-edit', width:600, height:400, mode: 'edit'});
+    	per.render(json);
+
+    	per.on('nodeClick', function(e){
+			//e: {x: 967, y: 371, id: "500001", parentId: "400010"} 
+			console.log(e);
+
+			var cd = nodeData.content,
+				template = '<li class="newsItem"><a target="_blank" href="{docUrl}" title="{docName}">{docName}</a></li>';
+
+			$('#newsPanel').remove();
+			$('<div id="newsPanel"><span class="arrow"></span><span class="arrow2"></span><ul></ul><span class="close">×</span></div>').appendTo($(document.body));
+			var np = $('#newsPanel'), ul = np.find('ul');
+			for(var i=cd.length-1; i>=0; i--){
+				$(per.util.substitute(template, cd[i])).appendTo(ul);
+			}
+			np.css({left: e.x+20, top: e.y-np.height()/2-10});
+
+			var close = np.find('.close');
+			close.on('click', function(){
+				np.remove();
+			});
+		});
+
+    	function doSave(){
+    		var data = per.save();
+    		document.getElementById('saveData').value = JSON.stringify(data);
+    	}
+
+    	function doInit(){
+    		var data = JSON.parse(document.getElementById('saveData').value);
+
+    		var cs = new CloudSpectrum({node: '#svg-container-view', width:600, height:400, mode: 'view'});
+    		cs.render(data);
+    	}
+		
+	</script>
+
+	</body>
+</html>
